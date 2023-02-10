@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy1 : EnemyProperties
 {
-
+    float distance;
     void Start()
     {
         
@@ -13,6 +13,12 @@ public class Enemy1 : EnemyProperties
     // Update is called once per frame
     void Update()
     {
-        
+        PlayerDistance();
+        Debug.Log(distance);
+    }
+
+    void PlayerDistance()
+    {
+        distance = Vector3.Distance(playerPos.position,this.transform.position);
     }
 }

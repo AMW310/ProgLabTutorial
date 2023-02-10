@@ -53,4 +53,11 @@ public class CameraBehaviour : MonoBehaviour
         */
         transform.LookAt(facingDir);
     }
+
+    void AimingBehaviour()
+    {
+
+    }
+
+
 }
