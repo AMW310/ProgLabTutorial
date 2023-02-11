@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody body;
     public int moveSpeed;
     public int jumpForce;
-    public float rotateSpeed;
+    public int rotateSpeed;
     int jumpCount;
     private void Awake()
     {
@@ -28,10 +28,11 @@ public class PlayerController : MonoBehaviour
     {
         float xInput = Input.GetAxis("Horizontal");
         float yInput = Input.GetAxis("Vertical");
+        Vector3 rot = new Vector3(0, xInput, 0).normalized * rotateSpeed;
         Vector3 dir = new Vector3(0, 0, yInput).normalized * moveSpeed;
         body.transform.Translate(dir * Time.deltaTime);
 
-        body.transform.Rotate(new Vector3 (0, xInput , 0));
+        body.transform.Rotate(rot * Time.deltaTime);
         /*Vector3 facingDir = new Vector3(xInput, 0, yInput);
         if (facingDir.magnitude > 0)
         {

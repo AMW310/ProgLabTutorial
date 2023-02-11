@@ -38,7 +38,7 @@ public class CameraBehaviour : MonoBehaviour
         }
             
 
-
+        facingDir.position = new Vector3(playerPos.position.x, playerPos.position.y + 1.69f, playerPos.position.z);
         float desiredAngle = facingDir.eulerAngles.y;
         Quaternion rotation = Quaternion.Euler(0, desiredAngle, 0);
         transform.position = playerPos.position - (rotation * offset);
