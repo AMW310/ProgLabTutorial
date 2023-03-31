@@ -19,6 +19,6 @@ public class Enemy1 : EnemyProperties
 
     void PlayerDistance()
     {
-        distance = Vector3.Distance(playerPos.position,this.transform.position);
+        distance = Vector3.Distance(p1pos.position,this.transform.position);
     }
 }

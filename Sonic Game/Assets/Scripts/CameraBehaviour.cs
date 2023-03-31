@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour
 {
     Animator anim;
-    Transform playerPos;
+    internal static Transform playerPos;
     public Transform facingDir;
     public Vector3 camOffset = new Vector3(0.4f, 1.8f, -1.3f);
     Vector3 offset;
