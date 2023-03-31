@@ -10,7 +10,7 @@ public class EnemyProperties : MonoBehaviour
     CameraBehaviour cam;
     void Start()
     {
-        p1pos = CameraBehaviour.playerPos;
+        p1pos = Manager.playerPos;
     }
 
     // Update is called once per frame

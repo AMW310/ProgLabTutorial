@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.forward = facingDir;
         }*/
-        Debug.Log(yInput);
+        //Debug.Log(yInput);
     }
 
     void Jump()
