@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
             Jump();
             jump = true;
             jumpCount++;
-            Falling();
+            StartCoroutine(Falling());
 
         }
         if(Input.GetButton("Fire1"))
@@ -87,13 +87,14 @@ public class PlayerController : MonoBehaviour
             body.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    void Falling()
+    IEnumerator Falling()
     {
-        if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
-        {
+        yield return new WaitForSeconds(1f);
+        //if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        //{
             anim.SetBool("Jump", false);
             jump = false;
-        }
+        //}
 
         if (airborne && !jump) 
         {
