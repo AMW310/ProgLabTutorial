@@ -6,13 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     private Animator anim;
     private Rigidbody body;
-    public int moveSpeed;
+    public float speed = 5f;
     public int jumpForce;
-    public int rotateSpeed;
+    public float rotationSpeed = 5f;
     public float boostForce;
     int jumpCount;
     public List<GameObject> animators;
-    bool jump;
+    public bool jump;
     bool airborne;
     private void Awake()
     {
@@ -32,10 +32,12 @@ public class PlayerController : MonoBehaviour
             Jump();
             jump = true;
             jumpCount++;
-            StartCoroutine(Falling());
+            anim.SetBool("Jump", true);
+
+            //StartCoroutine(Falling());
 
         }
-        if(Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
             body.AddForce(Vector3.forward * boostForce, ForceMode.Impulse);
         }
@@ -44,7 +46,43 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float xInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+
+        Vector3 forward = Camera.main.transform.forward;
+        Vector3 right = Camera.main.transform.right;
+        forward.y = 0;
+        right.y = 0;
+        forward = forward.normalized;
+        right = right.normalized;
+
+        Vector3 forwardRelativeVert = verticalInput * forward;
+        Vector3 rightRelativeHori = horizontalInput * right;
+
+        Vector3 CamRelativeMove = forwardRelativeVert + rightRelativeHori;
+
+        // Rotate the character smoothly towards the direction of movement
+        if (movement != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(CamRelativeMove, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        // Move the character
+        transform.Translate(CamRelativeMove * speed * Time.deltaTime, Space.World);
+
+        if (Mathf.Abs(horizontalInput) >= Mathf.Abs(verticalInput))
+        {
+            anim.SetFloat("Velocity", Mathf.Abs(horizontalInput));
+        }
+        else if (Mathf.Abs(verticalInput) > Mathf.Abs(horizontalInput))
+        {
+            anim.SetFloat("Velocity", Mathf.Abs(verticalInput));
+        }
+        Debug.Log(horizontalInput +"."+ verticalInput);
+        /* float xInput = Input.GetAxis("Horizontal");
         float yInput = Input.GetAxis("Vertical");
         //Vector3 rot = new Vector3(0, xInput, 0).normalized * rotateSpeed;
         Vector3 dir = new Vector3(xInput, 0, yInput).normalized * moveSpeed;
@@ -64,7 +102,7 @@ public class PlayerController : MonoBehaviour
         /*if (camref.forward == )
         {
 
-        }*/
+        }
         //body.transform.Translate(dir * Time.deltaTime);
         //body.transform.Rotate(rot * Time.deltaTime);
         /*Vector3 facingDir = new Vector3(xInput, 0, yInput);
@@ -87,7 +125,7 @@ public class PlayerController : MonoBehaviour
             body.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    IEnumerator Falling()
+    /*IEnumerator Falling()
     {
         yield return new WaitForSeconds(1f);
         //if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
@@ -101,16 +139,15 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("Falling", true);
             anim.SetBool("Grounded", false);
         }
-    }
+    }*/
     private void OnCollisionEnter(Collision collision)
     {
         jumpCount = 0;
         jump = false;
         if (collision.gameObject.name == "Plane" )
         {
-            anim.SetBool("Grounded", true);
             anim.SetBool("Jump", false);
-            anim.SetBool("Falling", false);
+            anim.SetBool("Grounded", true);
         }
     }
 
@@ -121,7 +158,6 @@ public class PlayerController : MonoBehaviour
         {
             if (jump == true)
             {
-                anim.SetBool("Jump", true);
                 anim.SetBool("Grounded", false);
             }
         }
